@@ -3,29 +3,24 @@ import { resolve } from "path";
 import vuePlugin from "@vitejs/plugin-vue";
 import VueScriptSetupExtend from "./plugins/vue-script-setup-extend.js";
 import packagesJSON from "./package.json";
+import buildFTL, { publicPath } from "build-ftl";
 
 const dependenciesList = Object.keys(packagesJSON.dependencies);
 
 // https://vitejs.dev/config/
 /** @type {import('vite').UserConfig} */
 export default defineConfig(({ mode }) => ({
-  plugins: [vuePlugin(), VueScriptSetupExtend()],
+  plugins: [
+    vuePlugin(),
+    VueScriptSetupExtend(),
+    buildFTL({ entryDir: "./entranceHTML", ftlDir: "./dist2" }),
+  ],
   optimizeDeps: {
     include: [...dependenciesList],
   },
   resolve: {
     alias: {
-      src: resolve(__dirname, "./src"),
-      context: resolve(__dirname, "./src/context"),
-      coms: resolve(__dirname, "./src/components"),
-      layout: resolve(__dirname, "./src/layout"),
-      pages: resolve(__dirname, "./src/pages"),
-      router: resolve(__dirname, "./src/router"),
-      styles: resolve(__dirname, "./src/styles"),
-      utils: resolve(__dirname, "./src/utils"),
-      views: resolve(__dirname, "./src/views"),
-      api: resolve(__dirname, "./src/api"),
-      store: resolve(__dirname, "./src/store"),
+      "@": resolve(__dirname, "./src"),
     },
     extensions: [".js", ".tsx", ".vue", ".jsx", ".ts"],
   },
@@ -45,9 +40,21 @@ export default defineConfig(({ mode }) => ({
     // 启用manifest.json 文件
     manifest: true,
     rollupOptions: {
-      input: {},
+      onwarn(warning, warn) {
+        if (warning.code === "MODULE_LEVEL_DIRECTIVE") return;
+        warn(warning);
+      },
+      input: {
+        main: resolve(__dirname, "./entranceHTML/main.html"),
+      },
+      output: {
+        manualChunks: {
+          vue: ["vue"],
+        },
+      },
     },
   },
+  base: mode === "development" ? "/" : publicPath,
   css: {
     preprocessorOptions: {
       less: {
