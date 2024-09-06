@@ -4,7 +4,7 @@ type RequestResult<T> = T extends (...args: any[]) => Promise<infer V>
   ? V
   : never;
 
-const defaultOptions = { initSearch: true, requestClearData: true };
+const defaultOptions = { initSearch: true, autoEmpty: true };
 
 export default function useRequest<
   T extends (params: any, cancelToken?: CancelToken) => Promise<any>,
@@ -13,7 +13,7 @@ export default function useRequest<
   options?: {
     initRequestParams?: Parameters<T>[0] | undefined;
     initSearch?: boolean;
-    requestClearData?: boolean;
+    autoEmpty?: boolean;
   },
 ): [
   (params?: Parameters<T>[0]) => Promise<RequestResult<T>>,
@@ -31,7 +31,7 @@ export default function useRequest<
   async function request(params?: Parameters<T>[0]) {
     loading.value = true;
     try {
-      if (_options.requestClearData) data.value = undefined;
+      if (_options.autoEmpty) data.value = undefined;
       const res = await requestApi(params, cancelTokenSourceRef.token);
       data.value = res;
       return res;
