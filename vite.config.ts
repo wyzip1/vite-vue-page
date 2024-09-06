@@ -23,10 +23,7 @@ export default defineConfig(({ mode }) => ({
       dts: "src/auto-imports.d.ts",
       resolvers: [VantResolver()],
     }),
-    Components({
-      resolvers: [VantResolver({})],
-    }),
-
+    Components({ resolvers: [VantResolver()] }),
     VueScriptSetupExtend(),
     buildFTL({ entryDir: "./entranceHTML", ftlDir: "./dist2" }),
     viteMockServe(),
@@ -57,12 +54,7 @@ export default defineConfig(({ mode }) => ({
       input: {
         main: resolve(__dirname, "./entranceHTML/main.html"),
       },
-      output: {
-        manualChunks: {
-          vue: ["vue"],
-          "vue-router": ["vue-router"],
-        },
-      },
+      output: { manualChunks: { vue: ["vue"], "vue-router": ["vue-router"] } },
     },
   },
   base: mode === "development" ? "/" : publicPath,
