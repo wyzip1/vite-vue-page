@@ -4,6 +4,6 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" name="INFO" title="测试页面">
 import router from "@/router";
 </script>
