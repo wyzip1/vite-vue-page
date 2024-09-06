@@ -4,7 +4,11 @@
       <router-link to="/info" class="text-blue-700 underline">info</router-link>
     </div>
     <div class="flex justify-center mb-2">
-      <van-button type="primary" @click="request()" :loading="loading">
+      <van-button
+        type="primary"
+        @click="request({ pageNum: 1, pageSize: 10 })"
+        :loading="loading"
+      >
         发起请求
       </van-button>
     </div>
@@ -14,8 +18,8 @@
       </van-button>
     </div>
 
-    <div class="text-center" v-if="data">
-      {{ JSON.stringify(data, null, 2) }}
+    <div class="flex justify-center whitespace-pre-wrap" v-if="data">
+      <div class="max-w-max">{{ JSON.stringify(data, null, 4) }}</div>
     </div>
   </div>
 </template>
