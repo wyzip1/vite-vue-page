@@ -1,7 +1,10 @@
 import { defineConfig } from "vite";
 import { resolve } from "path";
-import vuePlugin from "@vitejs/plugin-vue";
+
+import vue from "@vitejs/plugin-vue";
+import AutoImport from "unplugin-auto-import/vite";
 import VueScriptSetupExtend from "./plugins/vue-script-setup-extend.js";
+
 import packagesJSON from "./package.json";
 import buildFTL, { publicPath } from "build-ftl";
 
@@ -10,11 +13,13 @@ const dependenciesList = Object.keys(packagesJSON.dependencies);
 // https://vitejs.dev/config/
 /** @type {import('vite').UserConfig} */
 export default defineConfig(({ mode }) => ({
-  define: {
-    __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: "true",
-  },
   plugins: [
-    vuePlugin(),
+    vue(),
+    AutoImport({
+      imports: ["vue", "vue-router"],
+      include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
+      dts: "src/auto-imports.d.ts",
+    }),
     VueScriptSetupExtend(),
     buildFTL({ entryDir: "./entranceHTML", ftlDir: "./dist2" }),
   ],
@@ -22,9 +27,7 @@ export default defineConfig(({ mode }) => ({
     include: [...dependenciesList],
   },
   resolve: {
-    alias: {
-      "@": resolve(__dirname, "./src"),
-    },
+    alias: { "@": resolve(__dirname, "./src") },
     extensions: [".js", ".tsx", ".vue", ".jsx", ".ts"],
   },
   server: {
@@ -43,24 +46,19 @@ export default defineConfig(({ mode }) => ({
     // 启用manifest.json 文件
     manifest: true,
     rollupOptions: {
-      onwarn(warning, warn) {
-        if (warning.code === "MODULE_LEVEL_DIRECTIVE") return;
-        warn(warning);
-      },
       input: {
         main: resolve(__dirname, "./entranceHTML/main.html"),
       },
       output: {
         manualChunks: {
           vue: ["vue"],
+          "vue-router": ["vue-router"],
         },
       },
     },
   },
   base: mode === "development" ? "/" : publicPath,
   css: {
-    postcss: {
-      plugins: [require("tailwindcss"), require("autoprefixer")],
-    },
+    postcss: { plugins: [require("tailwindcss"), require("autoprefixer")] },
   },
 }));

@@ -23,7 +23,7 @@ export function folderRoutes(): RouteRecordRaw[] {
 
   const findParentPage = (
     key: string,
-    routerList = routeList
+    routerList = routeList,
   ): RouteRecordRaw | undefined => {
     key = key.replace(formatPathReg, "");
     const parentPage = routerList.find((router) => key.includes(router.path));
