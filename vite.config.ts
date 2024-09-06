@@ -3,7 +3,10 @@ import { resolve } from "path";
 
 import vue from "@vitejs/plugin-vue";
 import AutoImport from "unplugin-auto-import/vite";
+import Components from "unplugin-vue-components/vite";
+import { VantResolver } from "@vant/auto-import-resolver";
 import VueScriptSetupExtend from "./plugins/vue-script-setup-extend.js";
+import { viteMockServe } from "vite-plugin-mock";
 
 import packagesJSON from "./package.json";
 import buildFTL, { publicPath } from "build-ftl";
@@ -11,24 +14,29 @@ import buildFTL, { publicPath } from "build-ftl";
 const dependenciesList = Object.keys(packagesJSON.dependencies);
 
 // https://vitejs.dev/config/
-/** @type {import('vite').UserConfig} */
 export default defineConfig(({ mode }) => ({
   plugins: [
     vue(),
     AutoImport({
       imports: ["vue", "vue-router"],
-      include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
+      include: [/\.ts$/, /\.vue$/, /\.vue\?vue/, /\.md$/],
       dts: "src/auto-imports.d.ts",
+      resolvers: [VantResolver()],
     }),
+    Components({
+      resolvers: [VantResolver({})],
+    }),
+
     VueScriptSetupExtend(),
     buildFTL({ entryDir: "./entranceHTML", ftlDir: "./dist2" }),
+    viteMockServe(),
   ],
   optimizeDeps: {
     include: [...dependenciesList],
   },
   resolve: {
     alias: { "@": resolve(__dirname, "./src") },
-    extensions: [".js", ".tsx", ".vue", ".jsx", ".ts"],
+    extensions: [".js", ".tsx", ".vue", ".jsx", ".ts", ".mjs"],
   },
   server: {
     host: "0.0.0.0",
