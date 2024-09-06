@@ -8,7 +8,7 @@ interface PageOptions extends ComponentOptions {
 }
 
 type filterParam = { key: string; page: { default: PageOptions } };
-const pages = import.meta.globEager("../views/**/App.vue");
+const pages = import.meta.glob("../views/**/App.vue", { eager: true });
 
 export function folderRoutes(): RouteRecordRaw[] {
   const formatPathReg = /\.\.\/views|\/App\.vue/g;

@@ -10,6 +10,9 @@ const dependenciesList = Object.keys(packagesJSON.dependencies);
 // https://vitejs.dev/config/
 /** @type {import('vite').UserConfig} */
 export default defineConfig(({ mode }) => ({
+  define: {
+    __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: "true",
+  },
   plugins: [
     vuePlugin(),
     VueScriptSetupExtend(),
@@ -56,32 +59,8 @@ export default defineConfig(({ mode }) => ({
   },
   base: mode === "development" ? "/" : publicPath,
   css: {
-    preprocessorOptions: {
-      less: {
-        // 允许less语法链式调用
-        javascriptEnabled: true,
-      },
-      scss: {
-        // 禁止scss添加@charset: UTF-8
-        charset: false,
-      },
-    },
     postcss: {
-      plugins: [
-        require("tailwindcss"),
-        require("autoprefixer"),
-        // 删除样式库中的@charset: UTF-8
-        {
-          postcssPlugin: "internal:charset-removal",
-          AtRule: {
-            charset: (atRule) => {
-              if (atRule.name === "charset") {
-                atRule.remove();
-              }
-            },
-          },
-        },
-      ],
+      plugins: [require("tailwindcss"), require("autoprefixer")],
     },
   },
 }));
