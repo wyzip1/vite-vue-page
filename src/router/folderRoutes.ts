@@ -44,10 +44,13 @@ export function folderRoutes(): RouteRecordRaw[] {
     if (parentPage) {
       !parentPage.redirect && (parentPage.redirect = router.path);
       (parentPage.children as RouteRecordRaw[]).push(router);
+    } else if (page.default.name === "MAIN") {
+      routeList.unshift(router);
     } else routeList.push(router);
   }
 
   routeList.unshift({ path: "/", redirect: routeList[0].path });
+  routeList.push({ path: "/:chapters*", redirect: "/" });
 
   return routeList;
 }

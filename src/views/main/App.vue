@@ -18,7 +18,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="HOME" title="home">
+<script setup lang="ts" name="MAIN" title="home">
 import { fetchMockList } from "@/api";
 import useRequest from "@/hook/useRequest";
 
