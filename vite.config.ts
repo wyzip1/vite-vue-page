@@ -51,9 +51,6 @@ export default defineConfig(({ mode }) => ({
     // 启用manifest.json 文件
     manifest: true,
     rollupOptions: {
-      input: {
-        main: resolve(__dirname, "./entranceHTML/main.html"),
-      },
       output: { manualChunks: { vue: ["vue"], "vue-router": ["vue-router"] } },
     },
   },
