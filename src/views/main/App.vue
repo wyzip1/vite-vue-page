@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full p-4 box-border">
+  <div class="page-container">
     <div class="flex justify-center mb-2">
       <router-link to="/info" class="text-blue-700 underline">info</router-link>
     </div>
@@ -31,4 +31,13 @@ function startRequest() {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.page-container {
+  padding: 12px 16px;
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding-bottom: max(12px, constant(safe-area-inset-bottom));
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+</style>

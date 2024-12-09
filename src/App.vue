@@ -1,7 +1,5 @@
 <template>
-  <div class="page-container">
-    <router-view></router-view>
-  </div>
+  <router-view></router-view>
 </template>
 
 <script setup lang="ts">
@@ -14,16 +12,7 @@ router.beforeResolve((to, _, next) => {
 });
 </script>
 
-<style lang="scss" scoped>
-.page-container {
-  padding: 12px 16px;
-  width: 100%;
-  min-height: 100vh;
-  box-sizing: border-box;
-  padding-bottom: max(12px, constant(safe-area-inset-bottom));
-  padding-bottom: max(12px, env(safe-area-inset-bottom));
-}
-</style>
+<style lang="scss" scoped></style>
 
 <style>
 html {
