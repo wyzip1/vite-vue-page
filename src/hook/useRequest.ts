@@ -4,7 +4,7 @@ type RequestResult<T> = T extends (...args: any[]) => Promise<infer V>
   ? V
   : never;
 
-const defaultOptions = { initSearch: true, autoEmpty: true };
+const defaultOptions = { manual: true, autoEmpty: true };
 
 export default function useRequest<
   T extends (params: any, cancelToken?: CancelToken) => Promise<any>,
@@ -12,7 +12,7 @@ export default function useRequest<
   requestApi: T,
   options?: {
     initRequestParams?: Parameters<T>[0] | undefined;
-    initSearch?: boolean;
+    manual?: boolean;
     autoEmpty?: boolean;
   },
 ): [
@@ -46,7 +46,7 @@ export default function useRequest<
   }
 
   onMounted(() => {
-    if (!_options.initSearch) return;
+    if (_options.manual) return;
     request(_options.initRequestParams);
   });
 

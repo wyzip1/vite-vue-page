@@ -23,7 +23,7 @@ import { fetchMockList } from "@/api";
 import useRequest from "@/hook/useRequest";
 
 const [request, data, loading, cancelRequest] = useRequest(fetchMockList, {
-  initSearch: false,
+  manual: false,
 });
 
 function startRequest() {
