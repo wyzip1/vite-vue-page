@@ -4,7 +4,7 @@
       <router-link to="/info" class="text-blue-700 underline">info</router-link>
     </div>
     <div class="flex gap-2 justify-center mb-2">
-      <van-button type="primary" @click="startRequest()" :loading="loading">
+      <van-button type="primary" @click="request()" :loading="loading">
         发起请求
       </van-button>
       <van-button :disabled="!loading" @click="cancelRequest()">
@@ -23,12 +23,9 @@ import { fetchMockList } from "@/api";
 import useRequest from "@/hook/useRequest";
 
 const [request, data, loading, cancelRequest] = useRequest(fetchMockList, {
-  manual: false,
+  manual: true,
+  params: { pageNum: 1, pageSize: 10 },
 });
-
-function startRequest() {
-  request({ pageNum: 1, pageSize: 10 });
-}
 </script>
 
 <style scoped lang="scss">

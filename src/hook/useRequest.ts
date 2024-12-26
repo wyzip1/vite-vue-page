@@ -11,7 +11,7 @@ export default function useRequest<
 >(
   requestApi: T,
   options?: {
-    initRequestParams?: Parameters<T>[0] | undefined;
+    params?: Parameters<T>[0] | undefined;
     manual?: boolean;
     autoEmpty?: boolean;
   },
@@ -28,7 +28,7 @@ export default function useRequest<
 
   let cancelTokenSourceRef = axios.CancelToken.source();
 
-  async function request(params?: Parameters<T>[0]) {
+  async function request(params: Parameters<T>[0] = _options.params) {
     loading.value = true;
     try {
       if (_options.autoEmpty) data.value = undefined;
@@ -47,7 +47,7 @@ export default function useRequest<
 
   onMounted(() => {
     if (_options.manual) return;
-    request(_options.initRequestParams);
+    request(_options.params);
   });
 
   onBeforeUnmount(() => {
