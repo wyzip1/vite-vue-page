@@ -4,7 +4,7 @@ type RequestResult<T> = T extends (...args: any[]) => Promise<infer V>
   ? V
   : never;
 
-const defaultOptions = { manual: true, autoEmpty: true };
+const defaultOptions = { manual: false, autoEmpty: true };
 
 export default function useRequest<
   T extends (params: any, cancelToken?: CancelToken) => Promise<any>,
