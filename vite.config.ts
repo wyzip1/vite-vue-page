@@ -5,11 +5,12 @@ import vue from "@vitejs/plugin-vue";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { VantResolver } from "@vant/auto-import-resolver";
-import VueScriptSetupExtend from "./plugins/vue-script-setup-extend.js";
+import VueScriptSetupExtend from "./plugins/vue-script-setup-extend";
 import { viteMockServe } from "vite-plugin-mock";
 
 import packagesJSON from "./package.json";
 import buildFTL, { publicPath } from "build-ftl";
+import MultiPageAutoPlugin from "vite-plugin-multipage-auto";
 
 const dependenciesList = Object.keys(packagesJSON.dependencies);
 
@@ -25,7 +26,8 @@ export default defineConfig(({ mode }) => ({
     }),
     Components({ resolvers: [VantResolver()] }),
     VueScriptSetupExtend(),
-    buildFTL({ entryDir: "./entranceHTML", ftlDir: "./dist2" }),
+    MultiPageAutoPlugin(),
+    buildFTL({ ftlDir: "./dist2" }),
     viteMockServe(),
   ],
   optimizeDeps: {
