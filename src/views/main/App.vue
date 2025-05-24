@@ -7,7 +7,7 @@
       <van-button type="primary" @click="request()" :loading="loading">
         发起请求
       </van-button>
-      <van-button :disabled="!loading" @click="cancelRequest()">
+      <van-button :disabled="!loading" @click="handleStopRequst">
         中断请求
       </van-button>
     </div>
@@ -21,11 +21,20 @@
 <script setup lang="ts" name="MAIN" title="home">
 import { fetchMockList } from "@/api";
 import useRequest from "@/hook/useRequest";
+import { showDialog } from "vant";
 
 const [request, data, loading, cancelRequest] = useRequest(fetchMockList, {
   manual: true,
   params: { pageNum: 1, pageSize: 10 },
 });
+
+function handleStopRequst() {
+  cancelRequest();
+  showDialog({
+    title: "提示",
+    message: "请求已中断",
+  });
+}
 </script>
 
 <style scoped lang="scss">
