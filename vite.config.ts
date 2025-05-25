@@ -59,5 +59,7 @@ export default defineConfig(({ mode }) => ({
   base: mode === "development" ? "/" : publicPath,
   css: {
     postcss: { plugins: [require("tailwindcss"), require("autoprefixer")] },
+    // 如果'modern-compiler'不管用，可换成"modern"
+    preprocessorOptions: { scss: { api: "modern-compiler" } }, // or "modern"
   },
 }));
