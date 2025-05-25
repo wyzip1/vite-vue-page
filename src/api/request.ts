@@ -1,4 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import { showLoadingToast, closeToast, showDialog } from "vant";
+import "vant/es/dialog/style";
+import "vant/es/toast/style";
 
 export interface RequestResponse<T> {
   code: number;
@@ -78,10 +81,26 @@ function handleArraybufferRequest(
   }
 }
 
-const request = <T>(
-  config: AxiosRequestConfig,
-): Promise<RequestResponse<T>> => {
-  return instance(config);
+const request = <T>({
+  hideDialog,
+  ...config
+}: AxiosRequestConfig & { hideDialog?: boolean }): Promise<
+  RequestResponse<T>
+> => {
+  showLoadingToast({ forbidClick: true, duration: 0 });
+  const value = instance(config) as Promise<RequestResponse<T>>;
+  value
+    .catch((err) => {
+      if (hideDialog) return;
+      showDialog({
+        title: "错误提示",
+        message: err.data?.resultMessage || err.message || "请求失败",
+      });
+    })
+    .finally(() => {
+      closeToast();
+    });
+  return value;
 };
 
 export default request;
