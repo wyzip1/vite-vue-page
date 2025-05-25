@@ -94,7 +94,7 @@ const request = <T>({
       if (hideDialog) return;
       showDialog({
         title: "错误提示",
-        message: err.data?.resultMessage || err.message || "请求失败",
+        message: err.data?.message || err.message || "请求失败",
       });
     })
     .finally(() => {
