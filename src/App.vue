@@ -25,10 +25,7 @@ router.afterEach((to, from) => {
     removeCache(from.name as string);
   } else if (to.meta.keepAlive) addCache(to.name as string);
 
-  console.log(
-    isBack ? "返回 <-" : "进入 ->",
-    isBack ? from.meta.title : to.meta.title,
-  );
+  console.log(isBack ? "返回 <-" : "进入 ->", to.meta.title);
 
   position = window.history.state?.position || 0;
 });
