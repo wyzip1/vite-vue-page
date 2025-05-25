@@ -18,10 +18,12 @@
   </div>
 </template>
 
-<script setup lang="ts" name="MAIN" title="home">
+<script setup lang="ts">
 import { fetchMockList } from "@/api";
 import useRequest from "@/hook/useRequest";
 import { showDialog } from "vant";
+
+defineOptions({ name: "MAIN", title: "home" });
 
 const [request, data, loading, cancelRequest] = useRequest(fetchMockList, {
   manual: true,

@@ -10,7 +10,7 @@ interface PageOptions extends ComponentOptions {
 type filterParam = { key: string; page: { default: PageOptions } };
 const pages = import.meta.glob("../views/**/App.vue", { eager: true });
 
-export function folderRoutes(): RouteRecordRaw[] {
+export function folderRoutes(mainPageName = "MAIN"): RouteRecordRaw[] {
   const formatPathReg = /\.\.\/views|\/App\.vue/g;
   const createRouterItem = ({ key, page }: filterParam): RouteRecordRaw => {
     return {
@@ -44,7 +44,7 @@ export function folderRoutes(): RouteRecordRaw[] {
     if (parentPage) {
       !parentPage.redirect && (parentPage.redirect = router.path);
       (parentPage.children as RouteRecordRaw[]).push(router);
-    } else if (page.default.name === "MAIN") {
+    } else if (page.default.name === mainPageName) {
       routeList.unshift(router);
     } else routeList.push(router);
   }

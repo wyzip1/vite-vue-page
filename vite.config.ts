@@ -5,7 +5,6 @@ import vue from "@vitejs/plugin-vue";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { VantResolver } from "@vant/auto-import-resolver";
-import VueScriptSetupExtend from "./plugins/vue-script-setup-extend";
 import { viteMockServe } from "vite-plugin-mock";
 
 import packagesJSON from "./package.json";
@@ -25,7 +24,6 @@ export default defineConfig(({ mode }) => ({
       resolvers: [VantResolver()],
     }),
     Components({ resolvers: [VantResolver()] }),
-    VueScriptSetupExtend(),
     MultiPageAutoPlugin(),
     buildFTL({ ftlDir: "./dist2" }),
     viteMockServe(),
