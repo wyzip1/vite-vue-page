@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import "@/styles/tailwind.css";
+import "@/styles/index.css";
 import "vant/lib/index.css";
 
 import { setDialogDefaultOptions } from "vant";

@@ -6,6 +6,8 @@ import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { VantResolver } from "@vant/auto-import-resolver";
 import { viteMockServe } from "vite-plugin-mock";
+import tailwindcss from "@tailwindcss/vite";
+import autoprefixer from "autoprefixer";
 
 import packagesJSON from "./package.json";
 import buildFTL, { publicPath } from "build-ftl";
@@ -24,9 +26,10 @@ export default defineConfig(({ mode }) => ({
       resolvers: [VantResolver()],
     }),
     Components({ resolvers: [VantResolver()] }),
+    tailwindcss(),
     MultiPageAutoPlugin(),
     buildFTL({ ftlDir: "./dist2" }),
-    viteMockServe(),
+    viteMockServe({ mockPath: "mock" }),
   ],
   optimizeDeps: {
     include: [...dependenciesList],
@@ -56,7 +59,7 @@ export default defineConfig(({ mode }) => ({
   },
   base: mode === "development" ? "/" : publicPath,
   css: {
-    postcss: { plugins: [require("tailwindcss"), require("autoprefixer")] },
+    postcss: { plugins: [autoprefixer] },
     // 如果'modern-compiler'不管用，可换成"modern"
     preprocessorOptions: { scss: { api: "modern-compiler" } }, // or "modern"
   },

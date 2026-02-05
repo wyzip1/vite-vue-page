@@ -1,9 +1,9 @@
 {
   "extends": "./config/path.tsconfig.json",
   "compilerOptions": {
-    "types": ["vite/client"],
+    "types": ["vite/client", "@tailwindcss/vite"],
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
