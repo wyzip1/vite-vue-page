@@ -1,13 +1,13 @@
-import { IncomingMessage } from "http";
+import type { IncomingMessage } from "http";
 import type { MockMethod } from "vite-plugin-mock";
 import { parse } from "url";
 
-const sleep = (ms: number) => new Promise((rev) => setTimeout(rev, ms));
+const sleep = (ms: number) => new Promise(rev => setTimeout(rev, ms));
 
 const parseJsonBody = async (req: IncomingMessage) => {
-  return new Promise<Record<string, any>>((resolve) => {
+  return new Promise<Record<string, any>>(resolve => {
     let body = "";
-    req.on("data", (chunk) => {
+    req.on("data", chunk => {
       body += chunk;
     });
     req.on("end", () => {
@@ -126,7 +126,7 @@ const mockMethods: MockMethod[] = [
       const pageSize = Number(body.pageSize || query.pageSize);
       const name = body.name || query.name;
       const filterList = name
-        ? mockList.filter((item) => item.name.includes(name))
+        ? mockList.filter(item => item.name.includes(name))
         : mockList;
 
       const result = {

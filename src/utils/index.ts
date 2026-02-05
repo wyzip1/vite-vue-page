@@ -32,7 +32,7 @@ export const toggleList = <T>(
   item: T,
   customValidate?: (item: T) => boolean,
 ) => {
-  const index = list.findIndex((e) =>
+  const index = list.findIndex(e =>
     typeof customValidate === "function" ? customValidate(e) : e === item,
   );
   if (index > -1) list.splice(index, 1);
@@ -59,7 +59,7 @@ export function throttle(fn: Function, delay = 300) {
 }
 
 export const SelectFile = (type = "*") => {
-  return new Promise<File | undefined>((resolve) => {
+  return new Promise<File | undefined>(resolve => {
     const input = document.createElement("input");
     window.addEventListener(
       "focus",

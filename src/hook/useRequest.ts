@@ -1,39 +1,40 @@
-import axios, { CancelToken } from "axios";
+import { ref, onUnmounted, type Ref } from "vue";
+import axios from "axios";
 
-type RequestResult<T> = T extends (...args: any[]) => Promise<infer V>
+export type RequestResult<T> = T extends (...args: any[]) => Promise<infer V>
   ? V
   : never;
 
-const defaultOptions = { manual: false, autoEmpty: true };
-
-export default function useRequest<
-  T extends (params: any, cancelToken?: CancelToken) => Promise<any>,
->(
+export default function useRequest<T extends (...args: any[]) => Promise<any>>(
   requestApi: T,
   options?: {
     params?: Parameters<T>[0] | undefined;
     manual?: boolean;
-    autoEmpty?: boolean;
   },
+  handlerData?: (data: RequestResult<T>) => any,
 ): [
-  (params?: Parameters<T>[0]) => Promise<RequestResult<T>>,
+  (params: Parameters<T>[0]) => Promise<RequestResult<T>>,
   Ref<RequestResult<T> | undefined>,
   Ref<boolean>,
   () => void,
 ] {
-  const _options = { ...defaultOptions, ...options };
+  const loading = ref<boolean>(false);
+  const data = ref<RequestResult<T> | undefined>();
+  const cancelTokenSourceRef = ref(axios.CancelToken.source());
 
-  const loading = ref(false);
-  const data = ref<RequestResult<T>>();
-
-  let cancelTokenSourceRef = axios.CancelToken.source();
-
-  async function request(params: Parameters<T>[0] = _options.params) {
+  async function request(params: Parameters<T>[0]) {
     loading.value = true;
     try {
-      if (_options.autoEmpty) data.value = undefined;
-      const res = await requestApi(params, cancelTokenSourceRef.token);
-      data.value = res;
+      const res = await requestApi({
+        cancelToken: cancelTokenSourceRef.value.token,
+        ...params,
+      });
+      if (handlerData) {
+        const value = handlerData(res);
+        data.value = value ? res : value;
+      } else {
+        data.value = res;
+      }
       return res;
     } finally {
       loading.value = false;
@@ -41,16 +42,15 @@ export default function useRequest<
   }
 
   function cancelRequest() {
-    cancelTokenSourceRef.cancel();
-    cancelTokenSourceRef = axios.CancelToken.source();
+    cancelTokenSourceRef.value.cancel();
+    cancelTokenSourceRef.value = axios.CancelToken.source();
   }
 
-  onMounted(() => {
-    if (_options.manual) return;
-    request(_options.params);
-  });
+  if (!options?.manual && options?.params) {
+    request(options.params);
+  }
 
-  onBeforeUnmount(() => {
+  onUnmounted(() => {
     cancelRequest();
   });
 

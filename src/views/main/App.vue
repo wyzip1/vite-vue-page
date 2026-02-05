@@ -4,7 +4,11 @@
       <router-link to="/info" class="text-blue-700 underline">info</router-link>
     </div>
     <div class="flex gap-2 justify-center mb-2">
-      <van-button type="primary" @click="request()" :loading="loading">
+      <van-button
+        type="primary"
+        @click="request({ body: { pageNum: 1, pageSize: 10 } })"
+        :loading="loading"
+      >
         发起请求
       </van-button>
       <van-button :disabled="!loading" @click="handleStopRequst">
@@ -21,21 +25,15 @@
 <script setup lang="ts">
 import { fetchMockList } from "@/api";
 import useRequest from "@/hook/useRequest";
-import { showDialog } from "vant";
 
 defineOptions({ name: "MAIN", title: "home" });
 
 const [request, data, loading, cancelRequest] = useRequest(fetchMockList, {
   manual: true,
-  params: { pageNum: 1, pageSize: 10 },
 });
 
 function handleStopRequst() {
   cancelRequest();
-  showDialog({
-    title: "提示",
-    message: "请求已中断",
-  });
 }
 </script>
 

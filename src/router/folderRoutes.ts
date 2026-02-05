@@ -26,7 +26,7 @@ export function folderRoutes(mainPageName = "MAIN"): RouteRecordRaw[] {
     routerList = routeList,
   ): RouteRecordRaw | undefined => {
     key = key.replace(formatPathReg, "");
-    const parentPage = routerList.find((router) => key.includes(router.path));
+    const parentPage = routerList.find(router => key.includes(router.path));
     if (!parentPage) return;
     if (!parentPage.children) {
       parentPage.children = [];
